@@ -1,0 +1,60 @@
+@import './node_modules/bourbon/app/assets/stylesheets/bourbon';
+@import './node_modules/bourbon-neat/app/assets/stylesheets/neat';
+@import './node_modules/sass-mediaqueries/media-queries';
+
+@import "base/reset";
+@import "base/variables";
+@import "base/base";
+@import "base/typo";
+
+@import "modules/trigger";
+
+.intro {
+  height: 100vh;
+  background-color: $ruby;
+
+  @include display(flex);
+  @include justify-content(center);
+  @include align-items(center);
+}
+
+.stories {
+  min-height: 100vh;
+  background-color: $grapefruit;
+
+  @include display(flex);
+  @include flex-direction(column);
+  @include justify-content(center);
+  @include align-items(center);
+}
+
+.story {
+  position: relative;
+  background: $sunflower-shade;
+  border-radius: 2vw;
+  height: 25vh;
+  width: 25vw;
+  margin: 25vh;
+  @include display(flex);
+  @include justify-content(center);
+  @include align-items(center);
+
+  > * {
+    position: absolute;
+  }
+}
+
+.story {
+  p {padding: 1rem; border-radius: 20px; }
+  p { display: none;}
+
+  p[data-layer="-1"] {
+    background-color: darken($sunflower-shade, 10);
+    left: -200px;
+  }
+  p[data-layer="+1"] {
+    background-color: lighten($sunflower-shade, 10);
+    right: -200px;
+  }
+
+}
