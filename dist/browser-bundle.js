@@ -179,7 +179,6 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function getRandomNumber(min, max) {
-	  // Returns an arbritrary random number
 	  return Math.random() * (max - min) + min;
 	}
 	
@@ -190,21 +189,24 @@
 	    this.active = true;
 	    this.$trigger = $('.' + selector);
 	
+	    this.windowWidth = $(window).width();
+	    this.windowHeight = $(window).height();
+	    this.documentHeight = $(document).height();
+	
 	    // Fragments
 	    this.fragmentSVG = '<div class="fragment"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30"><defs><path d="M.68 0L15 30 29.32 0H.68z" id="a"/></defs><g visibility="inherit"><use xlink:href="#a" /><use xlink:href="#a" /></g></svg> </div>';
 	    this.numFragments = 1;
-	    this.fragmentSize = 20;
 	    this.fragments = [this.numFragments];
 	    this.$fragmentContainer = $('#fragment-container');
 	    this.containerWidth = this.$fragmentContainer.width();
 	    this.fragmentOffset = this.$fragmentContainer.offset().left;
-	    this.fragmentWidth = 10;
+	    this.fragmentWidth = 30;
 	
 	    this.triggerOffset = this.$trigger.position().top;
 	    this.triggered = false;
 	    this.scrollTop = 0;
 	
-	    this.tweens = [this.numFragments];
+	    this.spreadTweens = [this.numFragments];
 	
 	    this.setupFragmentsWithinContainer();
 	    this.setupTimelines();
@@ -223,10 +225,40 @@
 	      this.fragments = $('.fragment');
 	      this.fragments.each(function (i, el) {
 	
-	        var top = $(el).offset().top;
+	        var newYPos = getRandomNumber(0, _this.documentHeight - _this.windowHeight * 1.5);
+	        var newXPos = getRandomNumber(-_this.windowWidth / 2.5, _this.windowWidth / 2.5);
 	
-	        _this.tweens[i] = new TimelineMax().add([TweenMax.fromTo($(el), 1, { y: 0 }, { y: 10 })]);
+	        _this.spreadTweens[i] = new TimelineMax().add([TweenMax.fromTo($(el), 1, {
+	          y: 0,
+	          x: 0
+	        }, {
+	          y: newYPos,
+	          x: newXPos
+	        })]);
 	      });
+	    }
+	  }, {
+	    key: 'loop',
+	    value: function loop() {
+	      if (this.scrollTop > this.triggerOffset) {
+	        var scrollProgress = (this.scrollTop + this.triggerOffset) / this.documentHeight;
+	
+	        this.spreadTweens.forEach(function (timeline, i) {
+	          timeline.seek(1);
+	        });
+	      } else {
+	        // Timeline is at '0', when scrolled before trigger
+	        this.spreadTweens.forEach(function (timeline, i) {
+	          timeline.seek(0);
+	        });
+	      }
+	
+	      if (this.active) requestAnimationFrame(this.loop.bind(this));
+	    }
+	  }, {
+	    key: 'scrollCallback',
+	    value: function scrollCallback() {
+	      this.scrollTop = $(window).scrollTop();
 	    }
 	  }, {
 	    key: 'setupFragmentsWithinContainer',
@@ -245,8 +277,10 @@
 	      for (var i = 0; i < this.numFragments; i++) {
 	        var newElement = $(this.fragmentSVG);
 	
-	        newElement.css('left', counter * 10 + currentRow * this.fragmentWidth / 2);
+	        newElement.css('left', counter * this.fragmentWidth + currentRow * this.fragmentWidth / 2);
 	        newElement.css('top', currentRow * this.fragmentWidth);
+	        newElement.css('width', this.fragmentWidth);
+	        newElement.css('height', this.fragmentWidth);
 	        newElement.css('opacity', Math.random());
 	        newElement.appendTo(this.$fragmentContainer);
 	
@@ -260,30 +294,6 @@
 	          counter++;
 	        }
 	      }
-	    }
-	  }, {
-	    key: 'loop',
-	    value: function loop() {
-	      if (this.scrollTop > this.triggerOffset) {
-	        // console.log("Triggered")
-	        // this.$trigger.addClass('triggered')
-	        this.tweens.forEach(function (timeline, i) {
-	          timeline.seek(1);
-	        });
-	      } else {
-	        // console.log("NOT Triggered")
-	        // this.$trigger.removeClass('triggered')
-	        this.tweens.forEach(function (timeline, i) {
-	          timeline.seek(0);
-	        });
-	      }
-	
-	      if (this.active) requestAnimationFrame(this.loop.bind(this));
-	    }
-	  }, {
-	    key: 'scrollCallback',
-	    value: function scrollCallback() {
-	      this.scrollTop = $(window).scrollTop();
 	    }
 	  }]);
 	
