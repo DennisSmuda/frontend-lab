@@ -14,6 +14,8 @@ export default class ScrollFragment {
     this.documentHeight = $(document).height();
 
     // Fragments
+    this.scrollProgress     = 0;
+    this.indicatorPosition  = 0;
     this.fragmentSVG        = `<div class="fragment"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30"><defs><path d="M.68 0L15 30 29.32 0H.68z" id="a"/></defs><g visibility="inherit"><use xlink:href="#a" /><use xlink:href="#a" /></g></svg> </div>`
     this.numFragments       = 1;
     this.fragments          = [this.numFragments];
@@ -26,7 +28,8 @@ export default class ScrollFragment {
     this.triggered          = false;
     this.scrollTop          = 0;
 
-    this.spreadTweens             = [this.numFragments];
+    this.spreadTweens       = [this.numFragments];
+    this.parallaxTweens     = [this.numFragments];
 
     this.setupFragmentsWithinContainer();
     this.setupTimelines();
@@ -34,7 +37,7 @@ export default class ScrollFragment {
     // Setup Scroll Event
     $(window).on('scroll', window, this.scrollCallback.bind(this));
     // Start Looping
-    this.loop()
+    this.loop();
 
   }
 
@@ -46,6 +49,7 @@ export default class ScrollFragment {
       let newYPos = getRandomNumber(0, this.documentHeight-this.windowHeight*1.5);
       let newXPos = getRandomNumber(-this.windowWidth/2.5, this.windowWidth/2.5)
 
+      // Spread Tweens
       this.spreadTweens[i] = new TimelineMax().add([
         TweenMax.fromTo($(el), 1, {
           y: 0,
@@ -60,12 +64,12 @@ export default class ScrollFragment {
   }
 
 
-
-
-
   loop() {
     if (this.scrollTop > this.triggerOffset) {
-      let scrollProgress = (this.scrollTop+this.triggerOffset)/this.documentHeight;
+
+      this.scrollProgress = (this.scrollTop + this.triggerOffset)/this.documentHeight || 0;
+      this.indicatorPosition += ((this.scrollProgress - this.indicatorPosition) * 0.5);
+
 
 
       this.spreadTweens.forEach((timeline, i) => {
@@ -76,11 +80,9 @@ export default class ScrollFragment {
     } else {
       // Timeline is at '0', when scrolled before trigger
       this.spreadTweens.forEach((timeline, i) => {
-        timeline.seek(0)
+        timeline.seek(0);
       });
     }
-
-
 
     if (this.active) requestAnimationFrame(this.loop.bind(this));
   }

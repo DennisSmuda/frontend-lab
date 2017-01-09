@@ -13,7 +13,6 @@ export default class ScrollFloat {
     this.$floatItems            = $(`.${selector}`);
     this.tweens                 = [this.$floatItems.length];
     this.indicatorPosition      = 0;
-    this.lastIndicatorPosition  = 0;
 
     this.setupTweens();
     this.setupEvents();
@@ -38,7 +37,6 @@ export default class ScrollFloat {
     // - Use lerped indicator as 'timeline-seeker'
     this.scrollPercent = (this.lastScrollTop + this.windowHeight)/this.documentHeight || 0;
     this.indicatorPosition += ((this.scrollPercent - this.indicatorPosition) * 0.05);
-
 
 
     this.tweens.forEach((timeline, i) => {

@@ -66,7 +66,8 @@
 	
 	$(document).ready(function () {
 	  // let floater = new ScrollFloat('story');
-	  var fragger = new _ScrollFragment2.default('trigger');
+	  // let fragger = new ScrollFragment('trigger');
+	
 	});
 
 /***/ },
@@ -99,7 +100,6 @@
 	    this.$floatItems = $('.' + selector);
 	    this.tweens = [this.$floatItems.length];
 	    this.indicatorPosition = 0;
-	    this.lastIndicatorPosition = 0;
 	
 	    this.setupTweens();
 	    this.setupEvents();
@@ -194,6 +194,8 @@
 	    this.documentHeight = $(document).height();
 	
 	    // Fragments
+	    this.scrollProgress = 0;
+	    this.indicatorPosition = 0;
 	    this.fragmentSVG = '<div class="fragment"> <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30 30"><defs><path d="M.68 0L15 30 29.32 0H.68z" id="a"/></defs><g visibility="inherit"><use xlink:href="#a" /><use xlink:href="#a" /></g></svg> </div>';
 	    this.numFragments = 1;
 	    this.fragments = [this.numFragments];
@@ -207,6 +209,7 @@
 	    this.scrollTop = 0;
 	
 	    this.spreadTweens = [this.numFragments];
+	    this.parallaxTweens = [this.numFragments];
 	
 	    this.setupFragmentsWithinContainer();
 	    this.setupTimelines();
@@ -228,6 +231,7 @@
 	        var newYPos = getRandomNumber(0, _this.documentHeight - _this.windowHeight * 1.5);
 	        var newXPos = getRandomNumber(-_this.windowWidth / 2.5, _this.windowWidth / 2.5);
 	
+	        // Spread Tweens
 	        _this.spreadTweens[i] = new TimelineMax().add([TweenMax.fromTo($(el), 1, {
 	          y: 0,
 	          x: 0
@@ -241,7 +245,9 @@
 	    key: 'loop',
 	    value: function loop() {
 	      if (this.scrollTop > this.triggerOffset) {
-	        var scrollProgress = (this.scrollTop + this.triggerOffset) / this.documentHeight;
+	
+	        this.scrollProgress = (this.scrollTop + this.triggerOffset) / this.documentHeight || 0;
+	        this.indicatorPosition += (this.scrollProgress - this.indicatorPosition) * 0.5;
 	
 	        this.spreadTweens.forEach(function (timeline, i) {
 	          timeline.seek(1);

@@ -4,6 +4,6 @@ import ScrollFragment from 'ScrollFragment';
 
 $(document).ready(function() {
   // let floater = new ScrollFloat('story');
-  let fragger = new ScrollFragment('trigger');
+  // let fragger = new ScrollFragment('trigger');
 
 });
