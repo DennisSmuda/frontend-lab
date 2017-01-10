@@ -1,0 +1,63 @@
+figure {
+  margin: 0px;
+  position: relative;
+  clear: both;
+  margin:  0 20px;
+
+
+  &.left { margin-left: 0; }
+
+  &.one-third { width: 33%; }
+}
+
+.left {
+  float: left;
+}
+
+.zoomOverlay {
+  z-index: 900;
+  background: #ffffff;
+  position: absolute;
+  transition: opacity 300ms;
+  opacity: 0;
+  cursor: pointer;
+  cursor: -webkit-zoom-out;
+
+  &.show {
+    opacity: 1;
+  }
+}
+
+.zoom-effect img {
+  cursor: pointer;
+  cursor: -webkit-zoom-in;
+}
+
+.zoom-effect .zoomImg,
+.zoom-effect .zoomImg-wrap {
+  position: relative;
+  z-index: 901;
+  transition: all 0.3s;
+}
+
+.scrollbar-measure {
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+  position: absolute;
+  top: -9999px;
+}
+
+img {
+  display: block;
+  margin: auto;
+  max-width: 100%;
+}
+
+.aspectRatioPlaceholder img {
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // width: 100%;
+  // height: 100%;
+}

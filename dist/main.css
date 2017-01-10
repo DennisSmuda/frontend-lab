@@ -80,15 +80,19 @@ body.lightbox {
     margin: 0 auto;
     max-width: 500px;
     padding: 2rem; }
-  body.lightbox img {
-    float: right;
-    max-width: 40%; }
 
 h1 {
   font-size: 10vw; }
 
 h2 {
   font-size: 8vw; }
+
+h3 {
+  font-size: 4vw; }
+
+h5 {
+  margin: 1rem 0;
+  font-size: 2rem; }
 
 p {
   margin-top: 1rem; }
@@ -129,6 +133,52 @@ body.lightbox {
   width: 100%;
   height: 100%;
   fill: black; }
+
+figure {
+  margin: 0px;
+  position: relative;
+  clear: both;
+  margin: 0 20px; }
+  figure.left {
+    margin-left: 0; }
+  figure.one-third {
+    width: 33%; }
+
+.left {
+  float: left; }
+
+.zoomOverlay {
+  z-index: 900;
+  background: #ffffff;
+  position: absolute;
+  transition: opacity 300ms;
+  opacity: 0;
+  cursor: pointer;
+  cursor: -webkit-zoom-out; }
+  .zoomOverlay.show {
+    opacity: 1; }
+
+.zoom-effect img {
+  cursor: pointer;
+  cursor: -webkit-zoom-in; }
+
+.zoom-effect .zoomImg,
+.zoom-effect .zoomImg-wrap {
+  position: relative;
+  z-index: 901;
+  transition: all 0.3s; }
+
+.scrollbar-measure {
+  width: 100px;
+  height: 100px;
+  overflow: scroll;
+  position: absolute;
+  top: -9999px; }
+
+img {
+  display: block;
+  margin: auto;
+  max-width: 100%; }
 
 .intro {
   height: 100vh;

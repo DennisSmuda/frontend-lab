@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Lightbox.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Lightbox.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Lightbox imitating Medium zoom effect
+ * @param {selector} element  [Selector for image elements]
+ * @param {type} _options [options - margins etc]
+ */
+function Lightbox(element, _options) {
+  "use strict";
+
+  if (!element) return;
+
+  let zoomedImage = null;
+  let screenSize  = {};
+  let options     = _options || {};
+  let margin      = options.margin || 50;
+
+  let scrollDiv       = document.createElement("div");
+  scrollDiv.className = "scrollbar-measure";
+  document.body.appendChild(scrollDiv);
+  // OffsetWidth includes scrollbar and border
+  const scrollBarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+  document.body.removeChild(scrollDiv);
+
+  wrapImages();
+
+
+  // Update Dimensions and refresh cached variables
+  function updateScreenSize() {
+    let w = window,
+        d = document,
+        e = d.documentElement,
+        g = d.getElementsByTagName('body')[0],
+        x = w.innerWidth || e.clientWidth  || g.clientWidth,
+        y = w.innerWidth || e.clientHeight || g.clientHeight;
+        screenSize.x = x;
+        screenSize.y = y;
+  }
+
+  // Set screen variables initially and on resize
+  updateScreenSize();
+  window.addEventListener("resize", updateScreenSize);
+
+
+
+  function zoom() {
+    if (!this.isZoomed) {
+      this.isZoomed = !this.isZoomed;
+
+      zoomedImage = this;
+      if (!this.img) {
+        // this.img = this.getElementsByTagName('img')[0];
+        this.img = this;
+      }
+      console.log(this);
+
+      // Image Dimensions
+      let imgH = this.img.getBoundingClientRect().height;
+      let imgW = this.img.getBoundingClientRect().width;
+      let imgL = this.img.getBoundingClientRect().left;
+      let imgT = this.img.getBoundingClientRect().top;
+      console.log(screenSize.x - imgW)
+      // Get real Dimensions
+      let realW, realH;
+      if (this.img.dataset) {
+        realW = this.img.dataset.width;
+        realH = this.img.dataset.height;
+      } else {
+        realW = this.img.getAttribute('data-width');
+        realH = this.img.getAttribute('data-height');
+      }
+
+      // Add class to image
+      if (this.img.classList) this.img.classList.add('zoomImg');
+      else this.img.className += ' ' + 'zoomImg';
+
+      // Create overlay
+      this.overlay = document.createElement('div');
+      this.overlay.id = 'overlay';
+      this.overlay.className = 'zoomOverlay';
+      this.overlay.style.cssText = `height: ${screenSize.y}px;
+                                    width: ${screenSize.x}px;`
+      this.overlay.style.cssText += 'top: -' + ((screenSize.y-imgH)/2) + 'px;';
+      this.overlay.style.cssText += 'left: 0;';
+      // this.overlay.style.cssText += 'left: -' + ((screenSize.x-imgW)/2) + 'px;';
+
+      // Create Image wrapper
+      this.wrapper = document.createElement('div');
+      this.wrapper.id = 'wrapper';
+      this.wrapper.className = 'zoomImg-wrap zoomImg-wrap--absolute';
+      this.wrapper.appendChild(this.img);
+
+      this.wrapper.appendChild(this.overlay);
+      this.appendChild(this.wrapper);
+
+      // Wrapper coords
+      let wrapX = ((screenSize.x-scrollbarWidth)/2)-imgL - (imgW/2);
+      let wrapY = imgT*(-1) + (screenSize.y-imgH)/2;
+
+
+      // Calculate scale
+
+
+
+
+    } else {
+
+    }
+  }
+
+
+  // Apply effects on passed-in elements
+  const ImageElements = document.querySelectorAll(element);
+  Array.prototype.forEach.call(ImageElements, function(el, i) {
+    el.addEventListener("click", zoom);
+  });
+
+  // Zoom out on scroll
+  function zoomOut() {
+    if (zoomedImage) {
+      zoomedImage.click();
+    }
+  }
+
+  window.addEventListener("scroll", zoomOut);
+
+  /**
+   * wrapImages()
+   * Images need to inside of another DOM Node
+   * @return nothing
+   */
+  function wrapImages() {
+    const ImageElements = document.querySelectorAll(element);
+    Array.prototype.forEach.call(ImageElements, function(el, i) {
+      console.log(el);
+      // let original = document
+    });
+  }
+
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Lightbox">Lightbox</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jan 10 2017 10:43:42 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
