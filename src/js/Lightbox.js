@@ -1,3 +1,5 @@
+function getRandomInt(min, max) { return Math.random() * (max-min) + min }
+const cutoutClasses = ["top left", "bottom left", "top right", "bottom right"];
 /**
  * Lightbox imitating Medium zoom effect
  * @param {selector} element  [Selector for image elements]
@@ -42,6 +44,7 @@ function Lightbox(element, _options) {
   // Zoom function
   function zoom() {
     if (!this.isZoomed) {
+
       this.isZoomed = !this.isZoomed;
 
       zoomedImage = this;
@@ -87,7 +90,6 @@ function Lightbox(element, _options) {
 
       // Calculate scale
       var scale = 1;
-      console.log(realH, imgH);
       if (realH > imgH) {
         if (imgH == imgW && screenSize.y > screenSize.x) {
           // Square img and portrait aspect
@@ -118,7 +120,6 @@ function Lightbox(element, _options) {
         console.log('Zoomed version is bigger than the original');
       }
 
-
       let that = this;
       // Popout animation css
       setTimeout(function() {
@@ -128,6 +129,11 @@ function Lightbox(element, _options) {
         that.img.style.cssText= `transform: scale(${scale}); -webkit-transform: scale(${scale});`;
         that.overlay.className = 'zoomOverlay show';
       }, 0);
+
+      setTimeout(function() {
+        that.img.classList.add("active");
+      }, 100);
+
 
     } else {
       // Put image back in place
@@ -141,8 +147,7 @@ function Lightbox(element, _options) {
       this.overlay.className = "zoomOverlay";
 
       // Remove Element
-      let that = this;
-      setTimeout(function() {
+      let that = this; setTimeout(function() {
         that.children[0].appendChild(that.img);
         that.removeChild(that.wrapper);
 
@@ -152,9 +157,12 @@ function Lightbox(element, _options) {
         }
       }, 300);
 
+      setTimeout(function() {
+        that.img.classList.remove("active");
+      }, 0);
+
     }
   }
-
 
   // Apply effects on passed-in elements
   const ImageElements = document.querySelectorAll('figure');
@@ -171,16 +179,21 @@ function Lightbox(element, _options) {
 
   window.addEventListener("scroll", zoomOut);
 
-
+  /**
+   * Wrap raw <img> within figure
+   */
   function wrapImages() {
     const ImageElements = document.querySelectorAll(element);
     Array.prototype.forEach.call(ImageElements, function(el, i) {
       // Wrapping figure
       let figure = document.createElement("figure");
-      figure.classList = "one-third left zoom-effect";
+      // figure.classList = "left top zoom-effect";
+      // figure.classList = "zoom-effect";
+      figure.classList = "zoom-effect " + cutoutClasses[Math.floor(getRandomInt(0, cutoutClasses.length))];
+
 
       let figureInner = document.createElement("div");
-      figureInner.classList = "aspectRatioPlaceholder";
+      figureInner.className = "aspectRatioPlaceholder";
 
       el.parentNode.insertBefore(figureInner, el);
       figureInner.parentNode.insertBefore(figure, el);

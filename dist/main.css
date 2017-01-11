@@ -95,7 +95,8 @@ h5 {
   font-size: 2rem; }
 
 p {
-  margin-top: 1rem; }
+  margin-top: 1rem;
+  line-height: 1.5; }
 
 body.lightbox {
   color: #434A54; }
@@ -135,23 +136,26 @@ body.lightbox {
   fill: black; }
 
 figure {
-  margin: 0px;
   position: relative;
   clear: both;
-  margin: 0 20px; }
+  margin: 0 20px;
+  width: 50%; }
   figure.left {
-    margin-left: 0; }
-  figure.one-third {
-    width: 33%; }
+    margin-left: -20%; }
+  figure.right {
+    margin-right: -20%; }
 
 .left {
   float: left; }
+
+.right {
+  float: right; }
 
 .zoomOverlay {
   z-index: 900;
   background: #ffffff;
   position: absolute;
-  transition: opacity 300ms;
+  transition: opacity 0.25s;
   opacity: 0;
   cursor: pointer;
   cursor: -webkit-zoom-out; }
@@ -166,7 +170,7 @@ figure {
 .zoom-effect .zoomImg-wrap {
   position: relative;
   z-index: 901;
-  transition: all 0.3s; }
+  transition: all 0.25s; }
 
 .scrollbar-measure {
   width: 100px;
@@ -179,6 +183,30 @@ img {
   display: block;
   margin: auto;
   max-width: 100%; }
+
+/**
+ * VOLL Cutout Styles
+ * - requires 16/10 Image to produce the right cutout angle
+ */
+figure.left.bottom img {
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 28% 100%);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 28% 100%); }
+
+figure.left.top img {
+  -webkit-clip-path: polygon(28% 0%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(28% 0%, 100% 0%, 100% 100%, 0% 100%); }
+
+figure.right.top img {
+  -webkit-clip-path: polygon(0% 0%, 72% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, 72% 0%, 100% 100%, 0% 100%); }
+
+figure.right.bottom img {
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 72% 100%, 0% 100%);
+  clip-path: polygon(0% 0%, 100% 0%, 72% 100%, 0% 100%); }
+
+figure img.active {
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) !important;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) !important; }
 
 .intro {
   height: 100vh;

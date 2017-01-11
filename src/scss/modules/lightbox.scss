@@ -1,24 +1,32 @@
+$zoomDuration: 0.25s;
+
 figure {
-  margin: 0px;
   position: relative;
   clear: both;
   margin:  0 20px;
+  width: 50%;
 
+  &.left {
+    margin-left: -20%;
+  }
 
-  &.left { margin-left: 0; }
-
-  &.one-third { width: 33%; }
+  &.right {
+    margin-right: -20%;
+  }
 }
 
 .left {
   float: left;
+}
+.right {
+  float: right;
 }
 
 .zoomOverlay {
   z-index: 900;
   background: #ffffff;
   position: absolute;
-  transition: opacity 300ms;
+  transition: opacity $zoomDuration;
   opacity: 0;
   cursor: pointer;
   cursor: -webkit-zoom-out;
@@ -37,7 +45,7 @@ figure {
 .zoom-effect .zoomImg-wrap {
   position: relative;
   z-index: 901;
-  transition: all 0.3s;
+  transition: all $zoomDuration;
 }
 
 .scrollbar-measure {
@@ -54,10 +62,32 @@ img {
   max-width: 100%;
 }
 
-.aspectRatioPlaceholder img {
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // width: 100%;
-  // height: 100%;
+
+/**
+ * VOLL Cutout Styles
+ * - requires 16/10 Image to produce the right cutout angle
+ */
+figure.left.bottom img {
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 28% 100%);
+  clip-path:         polygon(0% 0%, 100% 0%, 100% 100%, 28% 100%);
+}
+
+figure.left.top img {
+  -webkit-clip-path: polygon(28% 0%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path:         polygon(28% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+figure.right.top img {
+  -webkit-clip-path: polygon(0% 0%, 72% 0%, 100% 100%, 0% 100%);
+  clip-path:         polygon(0% 0%, 72% 0%, 100% 100%, 0% 100%);
+}
+
+figure.right.bottom img {
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 72% 100%, 0% 100%);
+  clip-path:         polygon(0% 0%, 100% 0%, 72% 100%, 0% 100%);
+}
+
+figure img.active {
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) !important;
+  clip-path:         polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) !important;
 }
