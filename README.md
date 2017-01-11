@@ -25,3 +25,5 @@ native scrolling behavior
 
 
 ### Lightbox
+
+MediumLightbox rewrite, for VOLL-Website, includes transitioning cutout angles.
